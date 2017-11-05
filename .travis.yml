@@ -1,0 +1,35 @@
+language: generic
+sudo: required
+services:
+  - docker
+
+env:
+  global:
+    - LATEST=2.5
+  matrix:
+    - LEANOTE_VERSION=2.5
+install: true
+
+before_install:
+  - sudo apt-get remove docker docker-engine docker.io
+  - sudo apt-get install apt-transport-https ca-certificates curl software-properties-common
+  - sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+  - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+  - sudo apt-get update
+  - sudo apt-get install docker-ce
+  - sudo service docker restart
+
+before_script:
+  - docker --version
+
+script:
+  - docker build --build-arg="LEANOTE_VERSION=${LEANOTE_VERSION}" -t johannweging/leanote:${LEANOTE_VERSION} ./
+
+before_deploy:
+  - docker login --username ${DOCKER_USERNAME} --password ${DOCKER_PASSWORD}
+
+deploy:
+  provider: script
+  script: ./deploy.sh
+  on:
+    all_branches: true

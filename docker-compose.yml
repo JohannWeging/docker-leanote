@@ -1,0 +1,33 @@
+version: "3"
+
+services:
+  mongodb:
+    image: johannweging/mongodb:latest
+    networks:
+      - default
+    ports:
+      - "127.0.0.1:27017:27017"
+    environment:
+      - MONGODB_ROOT_PASSWORD=foobar
+    restart: unless-stopped
+
+  leanote:
+    build:
+      context: .
+      args:
+        - LEANOTE_VERSION=2.5
+    image: leanote:dev
+    environment:
+      - LN_APP_SECRET=0Ps5oxhGaCC211ZwQmRHj8lkzN73kxQtUEuHCjzNSQxN0i2TH5kNOsnV2xWvx6mb
+      - LN_DB_HOST=mongodb
+      - LN_DB_DBNAME=leanote
+      - LN_DB_USERNAME=leanote
+      - LN_DB_PASSWORD=leanote
+      - LN_SITE_URL=localhost
+    networks:
+      - default
+    ports:
+      - "127.0.0.1:9000:9000"
+    depends_on:
+      - mongodb
+    restart: unless-stopped
