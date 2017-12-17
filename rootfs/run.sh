@@ -48,7 +48,7 @@ set -e
 if [ "${rc}" != "0" ]; then
     mongorestore -h ${LN_DB_HOST} -d ${LN_DB_DBNAME} -u ${LN_DB_USERNAME} -p ${LN_DB_PASSWORD} --dir /leanote/mongodb_backup/leanote_install_data/
     # remove the demo user to disable the demo feature
-    mongo -h  ${LN_DB_HOST} -d ${LN_DB_DBNAME} -u ${LN_DB_USERNAME} -p ${LN_DB_PASSWORD} --eval 'db.users.remove({"Username":"demo"})' leanote
+    mongo -h  ${LN_DB_HOST} -u ${LN_DB_USERNAME} -p ${LN_DB_PASSWORD} --eval 'db.users.remove({"Username":"demo"})' leanote
 fi
 
 gosu leanote /leanote/bin/leanote-linux-amd64 -importPath github.com/leanote/leanote

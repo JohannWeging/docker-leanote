@@ -5,8 +5,9 @@ services:
 
 env:
   global:
-    - LATEST=2.5
+    - LATEST=2.6
   matrix:
+    - LEANOTE_VERSION=2.6
     - LEANOTE_VERSION=2.5
 install: true
 
